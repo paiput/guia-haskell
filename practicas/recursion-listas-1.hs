@@ -76,5 +76,21 @@ enLosContactos nombre (contacto:contactos) = nombre == fst contacto || enLosCont
 
 agregarContacto :: Contacto -> ContactosTel -> ContactosTel
 agregarContacto (nuevoNom, nuevoTel) contactos
-  | enLosContactos nuevoNom = contactos
-  | ...
+  | enLosContactos nuevoNom contactos = contactos
+  | otherwise = contactos ++ [(nuevoNom, nuevoTel)]
+
+-- defino otro pattern matching para quitar
+quitarT :: (Eq t) => (t,t) -> [(t,t)] -> [(t,t)]
+quitarT _ [] = []
+quitarT (a,b) ((ax,bx):xs)
+  | a == ax = xs
+  | otherwise = (ax,bx):(quitarT (a,b) xs)
+
+
+-- ver por que solo borra el primer contacto
+-- ej: eliminarContacto ("Lucas","5") [("Jorge","1"),("Lucas","2"),("Pedro","53")]
+-- eliminarContacto ("Pedro","5") [("Jorge","1"),("Lucas","5"),("Pedro","53")] --> Da [("Pedro","5"),("Pedro","5")]
+eliminarContacto :: Contacto -> ContactosTel -> ContactosTel
+eliminarContacto (nuevoNom, nuevoTel) contactos
+  | enLosContactos nuevoNom contactos = quitarT (nuevoNom, nuevoTel) contactos
+  | otherwise = contactos
