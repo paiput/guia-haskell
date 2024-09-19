@@ -50,10 +50,17 @@ hayRepetidos (x:xs) = estaIncluido x xs || hayRepetidos xs
 
 -- 8. mismosElementos :: (Eq t) => [t] -> [t] -> Bool, que dadas dos listas devuelve verdadero s´ı y solamente s´ı
 -- ambas listas contienen los mismos elementos, sin tener en cuenta repeticiones, es decir:
--- problema mismosElementos (s: seq⟨T⟩, r: seq⟨T⟩) : B {
--- requiere: { T rue }
--- asegura: { resultado = true ↔ todo elemento de s pertenece r y viceversa}
--- }
+  -- problema mismosElementos (s: seq⟨T⟩, r: seq⟨T⟩) : B {
+  -- requiere: { T rue }
+  -- asegura: { resultado = true ↔ todo elemento de s pertenece r y viceversa}
+-- }e a xs
+
+listaPerteneceALista :: (Eq t) => [t] -> [t] -> Bool
+listaPerteneceALista [x] ys = pertenece x ys
+listaPerteneceALista (x:xs) ys = pertenece x ys && listaPerteneceALista xs ys
+
+mismosElementos :: (Eq t) => [t] -> [t] -> Bool
+mismosElementos xs ys = listaPerteneceALista xs ys && listaPerteneceALista ys xs
 
 -- 9. capicua :: (Eq t) => [t] -> Bool seg´un la siguiente especificaci´on:
 -- problema capicua (s: seq⟨T⟩) : B {
