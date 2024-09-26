@@ -36,7 +36,7 @@ personasRepetidas ((p1, p2):ps) = ([p1]++[p2])++personasRepetidas ps
 relacionesValidas :: [(String, String)] -> Bool
 relacionesValidas [(p1, p2)] = p1 /= p2
 relacionesValidas (relacion:relaciones) = esValida relacion && relacionesValidas relaciones
-    where esValida (p1, p2) = p1 /= p2 && not (pertenece (p1, p2) relaciones)
+    where esValida (p1, p2) = p1 /= p2 && not (pertenece (p1, p2) relaciones) && not (pertenece (p2, p1) relaciones)
 
 -- 2. problema personas 
 personas :: [(String, String)] -> [String]
