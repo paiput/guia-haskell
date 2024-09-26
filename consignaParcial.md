@@ -40,6 +40,6 @@ problema personaConMasAmigos (relaciones: seq⟨String x String⟩) : String {
 
 Conteste marcando la opción correcta. En el contexto de la programación funcional, se llama polimorfismo:
 
-  [x] Cuando una función puede invocarse con distintos tipos de datos sin tener que redefinirla.
-  [ ] Cuando una función puede invocarse con distintos tipos de datos teniendo que definirla para cada tipo de dato particular.
-  [ ] Cuando tengo un tipo de dato que puede ser usado para invocar a muchas funciones.
+  - [x] Cuando una función puede invocarse con distintos tipos de datos sin tener que redefinirla.
+  - [ ] Cuando una función puede invocarse con distintos tipos de datos teniendo que definirla para cada tipo de dato particular.
+  - [ ] Cuando tengo un tipo de dato que puede ser usado para invocar a muchas funciones.
