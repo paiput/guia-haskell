@@ -20,12 +20,33 @@ contarApariciones n (x:xs)
     | otherwise = contarApariciones n xs
 
 -- Auxiliar
+ordenar :: (Ord t) => [t] -> [t]
+ordenar [] = []
+ordenar xs = (ordenar (quitar (maximo xs) xs)) ++ [maximo xs]
+    where 
+        maximo :: (Ord t) => [t] -> t
+        maximo [x] = x
+        maximo (x:y:xs)
+            | x > y = maximo (x:xs)
+            | otherwise = maximo (y:xs)
+        quitar :: (Eq t) => t -> [t] -> [t]
+        quitar _ [] = []
+        quitar n (x:xs) 
+            | n == x = xs
+            | otherwise = x:(quitar n xs)
+
+-- Auxiliar
 masRepetido :: (Eq t) => [t] -> t
 masRepetido [x] = x
 masRepetido [x,y] = x
-masRepetido (x:y:xs)
-    | contarApariciones x (y:xs) > contarApariciones y (x:xs) = masRepetido (x:xs)
-    | otherwise = masRepetido (y:xs)
+masRepetido lista = head (masRepetidoAux (eliminarRepetidos lista) lista)
+
+-- Auxiliar
+masRepetidoAux :: (Eq t) => [t] -> [t] -> [t]
+masRepetidoAux [x] _ = [x]
+masRepetidoAux (x:y:lsBase) lsRep
+    | contarApariciones x lsRep > contarApariciones y lsRep = x:masRepetidoAux lsBase lsRep
+    | otherwise = y:masRepetidoAux lsBase lsRep
     
 -- Auxiliar personas
 personasRepetidas :: [(String, String)] -> [String]
@@ -34,6 +55,7 @@ personasRepetidas ((p1, p2):ps) = ([p1]++[p2])++personasRepetidas ps
 
 -- 1. problema relacionesValidas
 relacionesValidas :: [(String, String)] -> Bool
+relacionesValidas [] = True
 relacionesValidas [(p1, p2)] = p1 /= p2
 relacionesValidas (relacion:relaciones) = esValida relacion && relacionesValidas relaciones
     where esValida (p1, p2) = p1 /= p2 && not (pertenece (p1, p2) relaciones) && not (pertenece (p2, p1) relaciones)
