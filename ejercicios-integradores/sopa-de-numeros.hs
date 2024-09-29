@@ -73,3 +73,87 @@ masRepetido tablero = masRepetidoFila (unirFilas tablero)
 [[1,2,3],[3,4,5],[5,6,7]]
 [[1,1,1],[2,2,5],[2,2,7]]
 -}
+
+-- Ejercicio 7. Implementar la funci´on valoresDeCamino :: Tablero ->Camino ->[Int]
+-- problema valoresDeCamino (t: Tablero, c: Camino) : seq⟨Z⟩ {
+--   requiere: {El tablero t es un tablero bien formado, es decir, la longitud de todas las filas es la misma, y tienen al
+--   menos un elemento}
+--   requiere: {Existe al menos una columna en el tablero t }
+--   requiere: {El tablero t no es vac´ıo, todos los n´umeros del tablero son positivos, mayor estricto a 0}
+--   requiere: {El camino c es un camino v´alido, es decir, secuencia de posiciones adyacentes en la que solo es posible
+--   desplazarse hacia la posici´on de la derecha o hacia abajo y todas las posiciones est´an dentro de los limites del tablero
+--   t}
+--   asegura: {res es igual a la secuencia de n´umeros que est´an en el camino c, ordenados de la misma forma que aparecen
+--   las posiciones correspondientes en el camino.}
+-- }
+valoresDeCamino :: Tablero -> Camino -> [Int]
+valoresDeCamino _ [] = []
+valoresDeCamino tablero ((fil, col):camino) = (obtenerColumna col (obtenerFila fil tablero)):valoresDeCamino tablero camino
+  where 
+    obtenerFila :: Int -> Tablero -> Fila
+    obtenerFila i tablero = iEsimoElemento i tablero
+    obtenerColumna :: Int -> Fila -> Int 
+    obtenerColumna i fila = iEsimoElemento i fila
+
+largoDe :: (Eq t) => [t] -> Int
+largoDe [] = 0
+largoDe (x:xs) = 1 + largoDe xs
+
+ultimoElementoDe :: (Eq t) => [t] -> t
+ultimoElementoDe [x] = x
+ultimoElementoDe (x:xs) = ultimoElementoDe xs
+
+quitarUltimo :: (Eq t) => [t] -> [t]
+quitarUltimo [x] = []
+quitarUltimo (x:xs) = x:(quitarUltimo xs)
+
+iEsimoElemento :: (Eq t) => Int -> [t] -> t
+iEsimoElemento i lista
+  | largoDe lista == i = ultimoElementoDe lista
+  | otherwise = iEsimoElemento i (quitarUltimo lista)
+
+{-
+[
+  [1,3,5],
+  [3,9,4],
+  [6,2,6]
+]
+
+[(1,2),(1,3),(2,3)]
+-}
+
+
+-- Ejercicio 8. Implementar la funci´on esCaminoFibo :: [Int] ->Int ->Bool
+-- problema esCaminoFibo (s:seq⟨Z⟩, i : Z) : Bool {
+--   requiere: {La secuencia de n´umeros s es no vac´ıa y est´a compuesta por n´umeros positivos (mayor estricto que 0)
+--   que representan los valores de un camino en un tablero}
+--   requiere: {i ≥ 0}
+--   asegura: {res = true ⇔ los valores de s son la sucesi´on de Fibonacci inicializada con el n´umero pasado como
+--   par´ametro i}
+-- }
+-- Notas: En este ejercicio se pasa una secuencia de valores en lugar de un tablero y un camino para no generar dependencia
+-- con el ejercicio anterior. Recordemos que la sucesi´on de Fibonacci est´a definida con la siguiente funci´on recursiva:
+-- f(0) = 0
+-- f(1) = 1
+-- f(n) = f(n-1) + f(n-2) con n>1
+-- En el ejemplo del tablero y del camino (verde claro) que figuran m´as arriba tenemos que esCaminoFibo [1,1,2,3,5] 1
+-- reduce a True.
+esCaminoFibo :: [Int] -> Int -> Bool
+esCaminoFibo [x] iFibo = esFiboAux iFibo x
+esCaminoFibo (x:xs) primerIFibo = esFiboAux primerIFibo x && esCaminoFibo xs primerIFibo
+
+-- esNumeroFibonacci :: Int -> Bool
+-- esNumeroFibonacci n = esFiboAux 0 n
+--   where
+esFiboAux :: Int -> Int -> Bool
+esFiboAux iFibo n
+  | n == fibonacci iFibo = True
+  | n < fibonacci iFibo = False
+  | otherwise = esFiboAux (iFibo+1) n
+
+fibonacci :: Int -> Int
+fibonacci 0 = 0
+fibonacci 1 = 1
+fibonacci n = fibonacci (n-1) + fibonacci (n-2) 
+
+-- esCaminoFibo [1,2,3,5] 2 // True
